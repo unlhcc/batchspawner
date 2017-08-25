@@ -421,10 +421,14 @@ class UserEnvMixin:
         env['USER'] = self.user.name
         home = pwd.getpwnam(self.user.name).pw_dir
         shell = pwd.getpwnam(self.user.name).pw_shell
+        work = re.sub('^\/home','/work',pwd.getpwnam(self.user.name).pw_dir)
+
         if home:
             env['HOME'] = home
         if shell:
             env['SHELL'] = shell
+        if work:
+            env['WORK'] = work
         return env
 
     def get_env(self):
