@@ -20,6 +20,7 @@ import pwd
 import os
 from subprocess import Popen, call
 import subprocess
+import re
 
 import xml.etree.ElementTree as ET
 
@@ -117,7 +118,7 @@ class BatchSpawnerBase(Spawner):
     req_homedir = Unicode()
     @default('req_homedir')
     def _req_homedir_default(self):
-        return pwd.getpwnam(self.user.name).pw_dir
+        return re.sub('^\/home','/work',pwd.getpwnam(self.user.name).pw_dir)
 
     req_keepvars = Unicode()
     @default('req_keepvars')
@@ -323,7 +324,6 @@ class BatchSpawnerBase(Spawner):
                              self.job_id, self.user.server.ip, self.user.server.port)
                 )
 
-import re
 
 class BatchSpawnerRegexStates(BatchSpawnerBase):
     """Subclass of BatchSpawnerBase that uses config-supplied regular expressions
